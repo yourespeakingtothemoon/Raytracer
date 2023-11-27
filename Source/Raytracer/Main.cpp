@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 				std::cout << "Renderer initialized" << std::endl;
 	}
 	//render window
-	if (!renderer.RenderWindow("Raytracer", 400, 300))
+	if (!renderer.RenderWindow("Raytracer", 1920, 1080))
 	{
 		std::cout << "Failed to render window" << std::endl;
 		return 1;
