@@ -2,8 +2,6 @@
 #include <glm/glm.hpp>
 #include <cstdint>
 
-namespace dbrt
-{
 
 typedef glm::vec3 color3_t;
 typedef glm::vec4 color4_t;
@@ -24,5 +22,5 @@ inline color4_t RGBAToColor(const rgba_t& rgba)
 
 inline rgba_t ColorToRGBA(const color4_t& color)
 {
-	return (((uint8_t)color.r*255) << 24) | (((uint8_t)color.g*255) << 16) | (((uint8_t)color.b*255) << 8) | ((uint8_t)color.a)cstdint
+	return (((uint8_t)color.r * 255) << 24) | (((uint8_t)color.g * 255) << 16) | (((uint8_t)color.b * 255) << 8) | ((uint8_t)color.a);
 }

@@ -21,6 +21,9 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="canvas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renderer.h">
@@ -33,6 +36,15 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="random.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="canvas.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mathutils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dbrt.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,8 +2,6 @@
 #include <cstdlib>
 #include <algorithm>
 
-namespace dbrt
-{
 
 inline void seedRandom(unsigned int seed)
 	{
@@ -23,4 +21,4 @@ inline float randomMinMax(float min, float max)
 
 	}	
 
-}
+
