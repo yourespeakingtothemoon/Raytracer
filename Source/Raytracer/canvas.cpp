@@ -21,7 +21,8 @@ SDL_DestroyTexture(m_texture);
 
 void Canvas::Update()
 {
-	SDL_UpdateTexture(m_texture, NULL, m_buffer.data(), m_size.x * sizeof(color4_t));
+	// set texture with buffer rgba_t data
+	SDL_UpdateTexture(m_texture, nullptr, m_buffer.data(), m_size.x * sizeof(rgba_t));
 }
 
 void Canvas::Clear(const color4_t& ccolor)

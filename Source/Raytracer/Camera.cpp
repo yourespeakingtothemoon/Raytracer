@@ -2,9 +2,9 @@
 #include "mathutils.h"
 
 Camera::Camera(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& up, float fov, float aspectRatio):
-m_eye(eye),
-	m_fov(fov),
-	m_aspectRatio(aspectRatio)
+	m_eye{ eye },
+	m_fov{fov},
+	m_aspectRatio{aspectRatio}
 {
 	LookAt(eye, target, up);
 }
@@ -35,7 +35,8 @@ ray_t Camera::GetRay(const glm::vec2& point) const
 	ray.origin = m_eye;
 		// calculate direction from point
 		 //<lower left + (horizontal * point x) + (vertical * point.y) - eye>
-		ray.direction =  m_lowerLeft + (m_horizontal * point.x) + (m_vertical * point.y) - m_eye;
+		//ray.direction =  m_lowerLeft + (m_horizontal * point.x) + (m_vertical * point.y) - m_eye;
+		ray.direction = glm::normalize(m_lowerLeft + (m_horizontal * point.x) + (m_vertical * point.y) - m_eye);
 
 		return ray;
 }

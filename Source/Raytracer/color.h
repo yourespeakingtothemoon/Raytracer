@@ -21,6 +21,12 @@ inline color4_t RGBAToColor(const rgba_t& rgba)
 }
 
 inline rgba_t ColorToRGBA(const color4_t& color)
-{
-	return (((uint8_t)color.r * 255) << 24) | (((uint8_t)color.g * 255) << 16) | (((uint8_t)color.b * 255) << 8) | ((uint8_t)color.a);
+{   
+        uint8_t r = static_cast<uint8_t>(glm::clamp(color.r, 0.0f, 1.0f) * 255.0f);
+        uint8_t g = static_cast<uint8_t>(glm::clamp(color.g, 0.0f, 1.0f) * 255.0f);
+        uint8_t b = static_cast<uint8_t>(glm::clamp(color.b, 0.0f, 1.0f) * 255.0f);
+        uint8_t a = static_cast<uint8_t>(glm::clamp(color.a, 0.0f, 1.0f) * 255.0f);
+
+        return (r << 24) | (g << 16) | (b << 8) | a;
+    
 }

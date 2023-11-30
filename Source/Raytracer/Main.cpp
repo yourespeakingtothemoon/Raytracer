@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 				std::cout << "Renderer initialized" << std::endl;
 	}
 	//render window
-	if (!renderer.RenderWindow("Raytracer", 1920, 1080))
+	if (!renderer.RenderWindow("Raytracer", 400, 300))
 	{
 		std::cout << "Failed to render window" << std::endl;
 		return 1;
@@ -23,12 +23,12 @@ int main(int argc, char** argv)
 	{
 		std::cout << "Window rendered" << std::endl;
 	}
-	Canvas canvas(1920,1080, renderer);
+	Canvas canvas(400,300, renderer);
 	
 	float aspectRatio = canvas.GetSize().x / (float)canvas.GetSize().y;
-	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3{ 0, 0, 1 }, glm::vec3{ 0.607f,0.294f,0.294f}, glm::vec3{ 1, 1, 1 }, 70.0f, aspectRatio);
+	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3{ 0, 0, 1 }, glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, 70.0f, aspectRatio);
 
-	Scene scene; // sky color could be set with the top and bottom color
+	Scene scene = Scene(glm::vec3{ 0.607f,0.294f,0.294f },glm::vec3{0.2f,0.2f,0.2f});// = Scene(glm::vec3{ 0,1,0}, glm::vec3{ 1,1,1} ); // sky color could be set with the top and bottom color
 	scene.SetCamera(camera);
 
 
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 	{
 		canvas.Clear({0.0f,0.0f,0.0f,1});
 	//	for(int i = 0; i < 1000; i++) canvas.DrawPoint({randomMinMax(0,canvas.GetSize().x),randomMinMax(0,canvas.GetSize().y)},{random(),random(),random(),1});
-		scene.Render(canvas);
+	scene.Render(canvas);
 		canvas.Update();
 		renderer.PresentCanvas(canvas);
 

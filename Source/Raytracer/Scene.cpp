@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "mathutils.h"
+#include <iostream>
 
 void Scene::Render(Canvas& canvas)
 {
@@ -10,10 +11,11 @@ void Scene::Render(Canvas& canvas)
 		{
 			// create vec2 pixel from canvas x,y
 			
-			glm::vec2 pixel = { canvas.GetSize().x , canvas.GetSize().y };
+			glm::vec2 pixel = { x , y };
 			// get normalized (0 - 1) point coordinates from pixel
 			//<get normalized point coordinates from pixel>
 			glm::vec2 point = { pixel.x / canvas.GetSize().x, pixel.y / canvas.GetSize().y };
+
 			// flip y
 			point.y = 1.0f - point.y;
  
@@ -35,11 +37,10 @@ void Scene::Render(Canvas& canvas)
 color3_t Scene::Trace(const ray_t& ray)
 {
 		glm::vec3 direction = glm::normalize(ray.direction);
-
 		// set scene sky color
 		float t = (direction.y + 1) * 0.5f; // direction.y (-1 <-> 1) => (0 <-> 1)
 		color3_t color = lerp(m_bottomColor,m_topColor,t);
-
+		//std::cout << "direction: " << direction.x << " " << direction.y << " " << direction.z << std::endl;
 			return color;
 	}
-}
+

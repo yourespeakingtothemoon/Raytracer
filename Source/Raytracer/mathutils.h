@@ -1,12 +1,11 @@
 #pragma once
-
-
-
-
+#include <glm/glm.hpp>
 template<typename T>
 	inline T lerp(const T& start, const T& end, float time)
 	{
-		return (start*(1-time)) + (start * end);
+
+		//std::cout << (start * (1 - time)) + (end * time).x;
+		return (start * (1-time)) + (end * time);
 	}
 
 	inline glm::vec3 cross(const glm::vec3& A, const glm::vec3& B)
