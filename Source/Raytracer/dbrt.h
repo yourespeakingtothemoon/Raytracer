@@ -8,4 +8,7 @@
 #include "Ray.h"
 #include "canvas.h"
 
+#include "Camera.h"
+#include "Scene.h"
+
 #include <iostream>
