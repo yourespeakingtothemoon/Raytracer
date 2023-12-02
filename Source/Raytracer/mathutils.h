@@ -19,3 +19,8 @@ template<typename T>
 		float length = sqrt((A.x * A.x) + (A.y * A.y) + (A.z * A.z));
 		return {A.x / length, A.y / length, A.z / length};
 	}
+
+	inline float dot(const glm::vec3& v1, const glm::vec3& v2)
+	{
+		return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
+	}

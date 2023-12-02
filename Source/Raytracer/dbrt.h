@@ -11,4 +11,9 @@
 #include "Camera.h"
 #include "Scene.h"
 
+#include "Material.h"
+#include "Object.h"
+
+#include "Shapes.h"
+
 #include <iostream>
