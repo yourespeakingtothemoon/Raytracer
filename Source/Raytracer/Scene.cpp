@@ -2,7 +2,7 @@
 #include "mathutils.h"
 #include <iostream>
 
-void Scene::Render(Canvas& canvas)
+void Scene::Render(Canvas& canvas, int numSamples)
 {
 	// cast ray for each point (pixel) on the canvas
 	for (int y = 0; y < canvas.GetSize().y; y++)
@@ -14,24 +14,33 @@ void Scene::Render(Canvas& canvas)
 
 			glm::vec2 pixel = { x , y };
 			// get normalized (0 - 1) point coordinates from pixel
-			//<get normalized point coordinates from pixel>
-			glm::vec2 point = { pixel.x / canvas.GetSize().x, pixel.y / canvas.GetSize().y };
+		// set initial color
+			color3_t color{ 0 };
+			// cast a ray for each sample, accumulate color value for each sample
+			// each ray will have a random offset
+			for ( int i = 0; i < numSamples; i++)
+			{
+				// get normalized (0 - 1) point coordinates from pixel
+				// add random x and y offset (0-1) to each pixel
+				glm::vec2 point = (pixel + glm::vec2{random(),random()})/ glm::vec2{canvas.GetSize().x,canvas.GetSize().y};
+				// flip y
+				point.y = 1.0f - point.y;
 
-			// flip y
-			point.y = 1.0f - point.y;
+				// create ray from camera
+				ray_t ray = m_camera->GetRay(point);
 
-			// create ray from camera
-			//<get ray from camera using point>
-			ray_t ray = m_camera->GetRay(point);
-
-			raycastHit_t raycastHit;
-			color3_t color = Trace(ray, 0, 100, raycastHit);
+				// cast ray into scene
+				// add color value from trace
+				raycastHit_t raycastHit;
+				color += Trace(ray, 0, 100, raycastHit, m_depth);
+			}
 
 			// draw color to canvas point (pixel)
-			canvas.DrawPoint(pixel, color4_t(color, 1));
-			// cast ray into scene
-			// set color value from trace
+			// get average color (average = (color + color + color) / number of samples)
+			color/= numSamples;
+				canvas.DrawPoint(pixel, color4_t(color, 1));
 		}
+
 	}
 
 }
@@ -46,7 +55,7 @@ color3_t Scene::Trace(const ray_t& ray)
 			return color;
 	}
 
-color3_t Scene::Trace(const ray_t& ray, float minDistance, float maxDistance, raycastHit_t& raycastHit)
+color3_t Scene::Trace(const ray_t& ray, float minDistance, float maxDistance, raycastHit_t& raycastHit, int depth)
 {
 	bool rayHit = false;
 	float closestDistance = maxDistance;
@@ -72,15 +81,26 @@ color3_t Scene::Trace(const ray_t& ray, float minDistance, float maxDistance, ra
 		if (raycastHit.material->Scatter(ray, raycastHit, color, scattered))
 		{
 			//raaycast hit normal as color
-			color = -raycastHit.normal;
+			//color = -raycastHit.normal;
 
 			//float normalizedValue = (raycastHit.distance / maxDistance);
 			//normalizedValue = std::min(std::max(normalizedValue, 0.0f), 1.0f); // Clamp between 0 and 255
 
 			//color = color3_t{ normalizedValue, normalizedValue, normalizedValue };
 			//color = normalize({ raycastHit.distance, raycastHit.distance, raycastHit.distance });
-			
-			return color;
+
+
+			//color *= raycastHit.distance;
+			if (depth > 0 && raycastHit.material->Scatter(ray, raycastHit, color, scattered))
+			{
+				// recursive function, call self and modulate (multiply) colors of depth bounces
+				return color * Trace(scattered, minDistance, maxDistance, raycastHit, depth - 1);
+			}
+			else
+			{
+				// reached maximum depth of bounces (color is black)
+				return color3_t{ 0, 0, 0 };
+			}
 
 			//return color;
 			

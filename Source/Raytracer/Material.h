@@ -16,17 +16,20 @@ public:
 	//Lambertian(<pass as const reference> albedo) : m_albedo{ albedo } {}
 	Lambertian(const color3_t& albedo) : m_albedo{ albedo } {}
 	//<override the parent Scatter() method>
-	virtual bool Scatter(const ray_t& ray, const raycastHit_t& raycastHit, color3_t& color, ray_t& scattered) const override
-	{
-		//<generate a random point in the unit sphere>
-		glm::vec3 target = raycastHit.point + raycastHit.normal + randomInUnitSphere();
-		//<set the scattered ray to a ray from the hit point to the random point in the unit sphere>
-		scattered = ray_t{ raycastHit.point, target - raycastHit.point };
-		//<set the color to the albedo>
-		color = m_albedo;
-		return true;
-	}
+	virtual bool Scatter(const ray_t& ray, const raycastHit_t& raycastHit, color3_t& color, ray_t& scattered) const override;
 
 protected:
 	color3_t m_albedo;
+};
+
+class Metal : public Material
+{
+	public:
+		Metal(const glm::vec3 & albedo, float fuzz) : m_albedo{ albedo }, m_fuzz{ fuzz } {}
+		virtual bool Scatter(const ray_t& ray, const raycastHit_t& raycastHit, glm::vec3 & color, ray_t& scattered) const override;
+
+	protected:
+		glm::vec3 m_albedo {0};
+		float m_fuzz = 0;
+
 };
