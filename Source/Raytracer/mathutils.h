@@ -1,5 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
+
+#define FLT_EPSILON      1.192092896e-07F 
+
 template<typename T>
 	inline T lerp(const T& start, const T& end, float time)
 	{
@@ -28,4 +31,33 @@ template<typename T>
 	inline glm::vec3 reflect(const glm::vec3& v, const glm::vec3& n)
 	{
 		return v - 2.0f * dot(n,v) * n;
+	}
+
+	inline bool approx(float a, float b)
+	{
+		return fabsf(a - b) < FLT_EPSILON;
+	}
+
+	inline bool refract(const glm::vec3& v, const glm::vec3& n, float index, glm::vec3& refracted)
+	{
+		// normalize the incoming vector (v)
+		glm::vec3 nv = glm::normalize(v);
+
+		float dt = dot(nv, n);
+		float discriminant = 1 - (index * index) * (1 - dt * dt);
+		if (discriminant > 0)
+		{
+			refracted = index * (nv - (n * dt)) - (n * std::sqrt(discriminant));
+			return true;
+		}
+
+		return false;
+		}
+
+	inline float schlick(float cosine, float index)
+	{
+		// calculate specular reflection coefficient, or probability of reflection
+		float r0 = (1.0f - index) / (1 + index);
+		r0 = r0 * r0;
+		return r0 + (1.0f - r0) * (float)std::pow((1.0f - cosine), 5);
 	}

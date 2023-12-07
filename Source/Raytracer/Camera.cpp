@@ -16,7 +16,7 @@ void Camera::LookAt(const glm::vec3& eye, const glm::vec3& target, const glm::ve
 	// set the camera axis vectors (forward, right, up)
 	// forward vector (eye <- target)
 
-	m_forward = target - eye;
+	m_forward = eye-target;
 	// normalize forward vector
 	m_forward = glm::normalize(m_forward);
 		// use cross product to create vectors

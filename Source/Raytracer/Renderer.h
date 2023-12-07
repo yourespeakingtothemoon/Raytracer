@@ -17,6 +17,6 @@ public:
 
 	//friend class canvas;
 	SDL_Renderer* m_renderer{ 0 };
-private:
 	SDL_Window* m_window{ 0 };
+private:
 };

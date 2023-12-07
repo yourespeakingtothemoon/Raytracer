@@ -10,14 +10,18 @@
 class Scene
 {
 public:
-	Scene(int depth = 5) : m_depth{ depth } {}
-	Scene(int depth, const color3_t& top, const color3_t& bottom) :
-		m_depth{depth},
+	Scene() = default;
+	Scene(const color3_t& top, const color3_t& bottom) :
+	
 	m_topColor{top},
 	m_bottomColor{bottom}
 	{}
 
-void Render(class Canvas& canvas, int numSamples);
+void Render(class Canvas& canvas, int numSamples, int depth);
+
+//helper function to display progess
+void DisplayProgress(int currentRow, int totalRows) const;
+
 color3_t Trace(const ray_t& ray);
 
 void SetCamera(std::shared_ptr<Camera> cam) {m_camera = cam;}
@@ -32,7 +36,7 @@ std::shared_ptr<Camera> m_camera;
 
 color3_t m_topColor{0};
 color3_t m_bottomColor{1};
-int m_depth{ 5 };
+// depreciated int m_depth{ 5 };
 
 //<vector of unique pointers to Object> m_objects;
 std::vector<std::unique_ptr<Object>> m_objects;

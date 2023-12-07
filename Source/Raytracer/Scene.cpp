@@ -1,8 +1,9 @@
 #include "Scene.h"
 #include "mathutils.h"
 #include <iostream>
+#include <iomanip>
 
-void Scene::Render(Canvas& canvas, int numSamples)
+void Scene::Render(Canvas& canvas, int numSamples, int depth)
 {
 	// cast ray for each point (pixel) on the canvas
 	for (int y = 0; y < canvas.GetSize().y; y++)
@@ -32,7 +33,7 @@ void Scene::Render(Canvas& canvas, int numSamples)
 				// cast ray into scene
 				// add color value from trace
 				raycastHit_t raycastHit;
-				color += Trace(ray, 0, 100, raycastHit, m_depth);
+				color += Trace(ray, 0, 100, raycastHit, depth);
 			}
 
 			// draw color to canvas point (pixel)
@@ -40,11 +41,20 @@ void Scene::Render(Canvas& canvas, int numSamples)
 			color/= numSamples;
 				canvas.DrawPoint(pixel, color4_t(color, 1));
 		}
-
+		//display render progress
+	DisplayProgress(y,canvas.GetSize().y);
+		std::cout << std::setprecision(2) << std::setw(5) << ((y/canvas.GetSize().y) * 100.0f) << "%\n";
 	}
 
-}
+	
+	
 
+
+}
+void Scene::DisplayProgress(int currentRow, int totalRows) const
+{
+	std::cout << std::setprecision(2) << std::setw(5) << ((static_cast<float>(currentRow) / totalRows) * 100.0f) << "%\n";
+}
 color3_t Scene::Trace(const ray_t& ray)
 {
 		glm::vec3 direction = glm::normalize(ray.direction);
@@ -77,6 +87,19 @@ color3_t Scene::Trace(const ray_t& ray, float minDistance, float maxDistance, ra
 	{
 		ray_t scattered;
 		color3_t color;
+
+		// check if maximum depth (number of bounces) is reached, get color from material and scattered ray
+		if (depth > 0 && raycastHit.material->Scatter(ray, raycastHit, color, scattered))
+		{
+			// recursive function, call self and modulate colors of depth bounces
+			return color * Trace(scattered, minDistance, maxDistance, raycastHit, depth - 1);
+		}
+		else
+		{
+			// reached maximum depth of bounces (get emissive color, will be black except for Emissive materials)
+			return raycastHit.material->GetEmissive();
+		}
+
 
 		if (raycastHit.material->Scatter(ray, raycastHit, color, scattered))
 		{
