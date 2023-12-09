@@ -48,10 +48,10 @@ int main(int argc, char** argv)
 	}
 	Canvas canvas(width,height, renderer);
 	
-	float aspectRatio = canvas.GetSize().x / (float)canvas.GetSize().y;
 	Scene scene(glm::vec3{ 0.25f,0.0f,0.25f }, glm::vec3{ 1.0f,1.0f,1.0f });
 	
-
+	CornellBox(scene, canvas);
+	//SpaceScene(scene, canvas);
 	
 		canvas.Clear({0.0f,0.0f,0.0f,1});
 	scene.Render(canvas,samples,depth);
@@ -94,6 +94,8 @@ int main(int argc, char** argv)
 
 void CornellBox(Scene& scene, const Canvas& canvas)
 {
+	float aspectRatio = canvas.GetSize().x / (float)canvas.GetSize().y;
+
 	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3{ 0, 0, 5 }, glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, 40.0f, aspectRatio);
 
 	scene.SetCamera(camera);
@@ -131,7 +133,11 @@ void SpaceScene(Scene& scene, const Canvas& canvas)
 {
 	
 
+	float aspectRatio = canvas.GetSize().x / (float)canvas.GetSize().y;
 
+	std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3{ 0, 0, 5 }, glm::vec3{ 0, 0, 0 }, glm::vec3{ 0, 1, 0 }, 40.0f, aspectRatio);
+
+	scene.SetCamera(camera);
 
 
 	auto box1 = std::make_unique<Mesh>(std::make_shared<Metal>(color3_t{ 1, 0.5f, 0 }, 0.5f));
